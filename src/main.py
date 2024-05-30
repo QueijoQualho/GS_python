@@ -1,5 +1,7 @@
 from csv_functions import save_csv
+from db_functions import read_all_from_table
 import os
+import pprint
 
 def menu() -> None:
 
@@ -9,7 +11,11 @@ def menu() -> None:
         opcao = input("Escolha uma opção: ")
 
         if opcao == '1':
-            print("Não tem essa função ainda")
+            table_name = input("Que tabela deseja buscar? ")
+            
+            for row in read_all_from_table(table_name=table_name):
+                pprint(row)    
+            
         elif opcao == '2':
             csv_file = input("Qual o caminho do CSV: ")
 
@@ -29,7 +35,7 @@ def check_csv_existence(csv_file: str) -> bool:
     return os.path.isfile(csv_file)
 
 def print_menu() -> None:
-    print("1. Ler CSV\n" + "2. Gravar arquivo no banco de dados\n" + "3. Sair")
+    print("1. Ler todos os registros de uma tabela\n" + "2. Gravar arquivo no banco de dados\n" + "3. Sair")
 
 if __name__ == "__main__":
     menu()

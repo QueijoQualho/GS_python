@@ -16,3 +16,4 @@ def save_csv(csv_file: str, table_name: str) -> str:
     
     return execute_query(insert_sql, data)
 
+

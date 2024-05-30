@@ -4,22 +4,31 @@ import pandas as pd
 import oracledb
 
 
-def execute_query(sql: str, params: Optional[List[Tuple]] = None) -> str:
+def execute_query(sql: str, params: Optional[List[Tuple]] = None):
     connection = get_connection()
     cursor = connection.cursor()
     try:
         if params:
             cursor.executemany(sql, params)
         else:
-            cursor.execute(sql)
+            data_query: list[tuple] = list(cursor.execute(sql))
+            
+            
+            
+
         connection.commit()
-        return "Query executed successfully."
+
     except Exception as e:
         print(e)
-        return str(e)
     finally:
         cursor.close()
         connection.close()
+        return data_query
+
+def read_all_from_table(table_name: str):
+    data_query: list[tuple] = execute_query(f"select * from {table_name}")
+
+    return data_query
 
 
 def map_pandas_type_to_oracle(pandas_type: str) -> str:
