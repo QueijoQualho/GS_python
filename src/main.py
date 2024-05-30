@@ -1,7 +1,7 @@
+import os
+from pprint import pprint
 from csv_functions import save_csv
 from db_functions import read_all_from_table
-import os
-import pprint
 
 def menu() -> None:
 

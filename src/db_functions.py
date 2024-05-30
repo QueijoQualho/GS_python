@@ -12,9 +12,7 @@ def execute_query(sql: str, params: Optional[List[Tuple]] = None):
             cursor.executemany(sql, params)
         else:
             data_query: list[tuple] = list(cursor.execute(sql))
-            
-            
-            
+            return data_query
 
         connection.commit()
 
@@ -23,7 +21,7 @@ def execute_query(sql: str, params: Optional[List[Tuple]] = None):
     finally:
         cursor.close()
         connection.close()
-        return data_query
+
 
 def read_all_from_table(table_name: str):
     data_query: list[tuple] = execute_query(f"select * from {table_name}")
