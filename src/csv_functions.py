@@ -1,28 +1,18 @@
 import pandas as pd
-from connection.db_config import get_connection
-from typing import List, Tuple
+from db_functions import execute_query, create_table
 
-def read_csv(csv_file: str, table_name: str) -> str:
+def save_csv(csv_file: str, table_name: str) -> str:
     df = pd.read_csv(csv_file)
+    
+    df = df.where(pd.notna(df), None)
 
     columns = ", ".join(df.columns)
-    placeholders = ", ".join(["%s" for _ in df.columns])
+    placeholders = ", ".join([f":{i+1}" for i in range(len(df.columns))])
     insert_sql = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
 
     data = [tuple(row) for row in df.itertuples(index=False, name=None)]
+
+    create_table(dataframe=df, table_name=table_name)
     
     return execute_query(insert_sql, data)
-    
-def execute_query(sql: str, params: List[Tuple]) -> str:
-    connection = get_connection()
-    cursor = connection.cursor()
-    try:
-        cursor.executemany(sql, params)
-        connection.commit()
-        return "Query executed successfully."
-    except Exception as e:
-        return str(e)
-    finally:
-        cursor.close()
-        connection.close()
-    
+
