@@ -1,10 +1,10 @@
 import os
 from pprint import pprint
 from csv_functions import save_csv
-from db_functions import read_all_from_table
+from db_functions import *
+
 
 def menu() -> None:
-
     while True:
         print_menu()
 
@@ -12,10 +12,10 @@ def menu() -> None:
 
         if opcao == '1':
             table_name = input("Que tabela deseja buscar? ")
-            
+
             for row in read_all_from_table(table_name=table_name):
-                pprint(row)    
-            
+                pprint(row)
+
         elif opcao == '2':
             csv_file = input("Qual o caminho do CSV: ")
 
@@ -25,17 +25,29 @@ def menu() -> None:
 
             table_name = input("Qual vai ser o nome da tabela? ")
             save_csv(csv_file=csv_file, table_name=table_name)
+
         elif opcao == '3':
-            print("Saindo...")
+            table_name = input("De qual tabela deseja ler os registros?")
+            entity = input("De qual país deseja ler os registros?: ")
+            
+            read_by_entity(table_name, entity)
+
+
+        elif opcao == '4':
+            print("Saindo.")
             break
         else:
             print("Opção inválida. Escolha novamente.")
 
+
 def check_csv_existence(csv_file: str) -> bool:
     return os.path.isfile(csv_file)
 
+
 def print_menu() -> None:
-    print("1. Ler todos os registros de uma tabela\n" + "2. Gravar arquivo no banco de dados\n" + "3. Sair")
+    print(
+        "1. Ler todos os registros de uma tabela\n" + "2. Gravar arquivo no banco de dados\n" "3. Ler registro por país:\n" + "4. Sair")
+
 
 if __name__ == "__main__":
     menu()
